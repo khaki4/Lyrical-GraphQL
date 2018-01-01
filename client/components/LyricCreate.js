@@ -10,19 +10,15 @@ class LyricCreate extends Component {
       content: '',
     }
   }
-  onChangeLyric(e) {
-    this.setState({ content: e.target.value})
-  }
-  onSubmit(e) {
-    const { content } = this.state
-    const { songId } = this.props
-    e.preventDefault()
+  onSubmit(event) {
+    event.preventDefault();
     
-    console.log(content)
     this.props.mutate({
-      content,
-      songId,
-    }).then(() => this.setState({ content: '' }))
+      variables: {
+        content: this.state.content,
+        songId: this.props.songId
+      }
+    }).then(() => this.setState({ content: '' }));
   }
   
   render() {
@@ -32,7 +28,7 @@ class LyricCreate extends Component {
           <label>Add a Lyric</label>
           <input
             value={this.state.content}
-            onChange={this.onChangeLyric.bind(this)}
+            onChange={event => this.setState({ content: event.target.value })}
           />
         </form>
       </div>
@@ -41,14 +37,14 @@ class LyricCreate extends Component {
 }
 
 const mutation = gql`
-  mutation AddLyricToSong($content: String, $songId: ID) {
-    addLyricToSong(content: $content, songId: $songId) {
-      id
-      lyrics {
-        content
-      }
+    mutation AddLyricToSong($content: String, $songId: ID) {
+        addLyricToSong(content: $content, songId: $songId) {
+            id
+            lyrics {
+                content
+            }
+        }
     }
-  }
 `;
 
 export default graphql(mutation)(LyricCreate)
