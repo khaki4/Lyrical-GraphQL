@@ -11,7 +11,9 @@ import SongDetail from './components/SongDetail'
 
 import './style/style.css'
 
-const client = new AppolloClient({})
+const client = new AppolloClient({
+  dataIdFromObject: o => o.id
+})
 
 const Root = () => {
   return (
